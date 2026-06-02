@@ -1,0 +1,10 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "openrouter-docs": {
+      "type": "local",
+      "command": ["node", "C:\\Users\\pakak\\Desktop\\Co\\openrouter-mcp\\index.js"],
+      "enabled": true
+    }
+  }
+}

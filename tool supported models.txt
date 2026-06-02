@@ -1,0 +1,433 @@
+Model Name	Weekly Tokens	Input	Output	Context	Released
+Favicon for qwen
+Qwen: Qwen3 235B A22B
+
+3.67B
+$0.455
+35% off
+$1.82
+35% off
+131,072
+Apr 29, 2025
+Favicon for openai
+OpenAI: o4 Mini High
+
+102M
+$1.10
+$4.40
+200,000
+Apr 16, 2025
+Favicon for openai
+OpenAI: o3
+
+739M
+$2
+$8
+200,000
+Apr 16, 2025
+Favicon for openai
+OpenAI: o4 Mini
+
+2.33B
+$1.10
+$4.40
+200,000
+Apr 16, 2025
+Favicon for openai
+OpenAI: GPT-4.1
+
+50.7B
+$2
+$8
+1,047,576
+Apr 14, 2025
+Favicon for openai
+OpenAI: GPT-4.1 Mini
+
+82.5B
+$0.40
+$1.60
+1,047,576
+Apr 14, 2025
+Favicon for openai
+OpenAI: GPT-4.1 Nano
+
+47.1B
+$0.10
+$0.40
+1,047,576
+Apr 14, 2025
+Favicon for meta-llama
+Meta: Llama 4 Maverick
+
+29.7B
+$0.35
+$1.15
+1,048,576
+Apr 6, 2025
+Favicon for meta-llama
+Meta: Llama 4 Scout
+
+10.6B
+$0.11
+$0.34
+10,000,000
+Apr 6, 2025
+Favicon for deepseek
+DeepSeek: DeepSeek V3 0324
+
+69.1B
+$0.20
+$0.77
+163,840
+Mar 24, 2025
+Favicon for google
+Google: Gemma 3 12B
+
+6.83B
+$0.04
+$0.13
+131,072
+Mar 14, 2025
+Favicon for google
+Google: Gemma 3 27B
+
+26.4B
+$0.08
+$0.16
+131,072
+Mar 12, 2025
+Favicon for mistralai
+Mistral: Saba
+
+30.1M
+$0.20
+$0.60
+32,768
+Feb 17, 2025
+Favicon for openai
+OpenAI: o3 Mini High
+
+24.1M
+$1.10
+$4.40
+200,000
+Feb 12, 2025
+Favicon for qwen
+Qwen: Qwen-Plus
+
+2.75B
+$0.26
+35% off
+$0.78
+35% off
+1,000,000
+Feb 1, 2025
+Favicon for openai
+OpenAI: o3 Mini
+
+7.97B
+$1.10
+$4.40
+200,000
+Feb 1, 2025
+Favicon for deepseek
+DeepSeek: R1
+
+4.8B
+$0.70
+$2.50
+163,840
+Jan 20, 2025
+Favicon for deepseek-ai
+DeepSeek: DeepSeek V3
+
+23.9B
+$0.32
+$0.89
+163,840
+Dec 27, 2024
+Favicon for openai
+OpenAI: o1
+
+18.1M
+$15
+$60
+200,000
+Dec 18, 2024
+Favicon for meta-llama
+Meta: Llama 3.3 70B Instruct (free)
+
+524M
+$0
+$0
+131,072
+Dec 6, 2024
+Favicon for meta-llama
+Meta: Llama 3.3 70B Instruct
+
+26.7B
+$0.10
+$0.32
+131,072
+Dec 6, 2024
+Favicon for amazon
+Amazon: Nova Lite 1.0
+
+863M
+$0.06
+$0.24
+300,000
+Dec 6, 2024
+Favicon for amazon
+Amazon: Nova Micro 1.0
+
+3.52B
+$0.035
+$0.14
+128,000
+Dec 6, 2024
+Favicon for amazon
+Amazon: Nova Pro 1.0
+
+53.6M
+$0.80
+$3.20
+300,000
+Dec 6, 2024
+Favicon for openai
+OpenAI: GPT-4o (2024-11-20)
+
+2.49B
+$2.50
+$10
+128,000
+Nov 21, 2024
+Favicon for mistralai
+Mistral Large 2407
+
+213M
+$2
+$6
+131,072
+Nov 19, 2024
+Favicon for thedrummer
+TheDrummer: UnslopNemo 12B
+
+919M
+$0.40
+$0.40
+32,768
+Nov 9, 2024
+Favicon for anthropic
+Anthropic: Claude 3.5 Haiku
+
+12.6B
+$0.80
+$4
+200,000
+Nov 4, 2024
+Favicon for thedrummer
+TheDrummer: Rocinante 12B
+
+473M
+$0.17
+$0.43
+32,768
+Sep 30, 2024
+Favicon for qwen
+Qwen2.5 72B Instruct
+
+4.72B
+$0.36
+$0.40
+131,072
+Sep 19, 2024
+Favicon for cohere
+Cohere: Command R (08-2024)
+
+170M
+$0.15
+$0.60
+128,000
+Aug 30, 2024
+Favicon for cohere
+Cohere: Command R+ (08-2024)
+
+32.9M
+$2.50
+$10
+128,000
+Aug 30, 2024
+Favicon for sao10k
+Sao10K: Llama 3.1 Euryale 70B v2.2
+
+309M
+$1.48
+$1.48
+131,072
+Aug 28, 2024
+Favicon for openai
+OpenAI: GPT-4o (2024-08-06)
+
+1.01B
+$2.50
+$10
+128,000
+Aug 6, 2024
+Favicon for meta-llama
+Meta: Llama 3.1 8B Instruct
+
+94.9B
+$0.02
+$0.05
+131,072
+Jul 23, 2024
+Favicon for meta-llama
+Meta: Llama 3.1 70B Instruct
+
+11.5B
+$0.40
+$0.40
+131,072
+Jul 23, 2024
+Favicon for mistralai
+Mistral: Mistral Nemo
+
+165B
+$0.15
+$0.15
+131,072
+Jul 19, 2024
+Favicon for openai
+OpenAI: GPT-4o-mini
+
+535B
+$0.15
+$0.60
+128,000
+Jul 18, 2024
+Favicon for openai
+OpenAI: GPT-4o-mini (2024-07-18)
+
+5.88B
+$0.15
+$0.60
+128,000
+Jul 18, 2024
+Favicon for sao10k
+Sao10k: Llama 3 Euryale 70B v2.1
+
+36.9M
+$1.48
+$1.48
+8,192
+
+Jun 18, 2024
+Favicon for openai
+OpenAI: GPT-4o
+
+14.3B
+$2.50
+$10
+128,000
+May 13, 2024
+Favicon for openai
+OpenAI: GPT-4o (2024-05-13)
+
+816M
+$5
+$15
+128,000
+May 13, 2024
+Favicon for mistralai
+Mistral: Mixtral 8x22B Instruct
+
+190M
+$2
+$6
+65,536
+Apr 17, 2024
+Favicon for openai
+OpenAI: GPT-4 Turbo
+
+110M
+$10
+$30
+128,000
+Apr 9, 2024
+Favicon for anthropic
+Anthropic: Claude 3 Haiku
+
+3.29B
+$0.25
+$1.25
+200,000
+Mar 13, 2024
+Favicon for mistralai
+Mistral Large
+
+488M
+$2
+$6
+128,000
+Feb 26, 2024
+Favicon for openai
+OpenAI: GPT-4 Turbo Preview
+
+—
+$10
+$30
+128,000
+Jan 25, 2024
+Favicon for openai
+OpenAI: GPT-3.5 Turbo (older v0613)
+
+25.9M
+$1
+$2
+4,095
+
+Jan 25, 2024
+Favicon for openai
+OpenAI: GPT-4 Turbo (older v1106)
+
+—
+$10
+$30
+128,000
+Nov 6, 2023
+Favicon for openai
+OpenAI: GPT-3.5 Turbo 16k
+
+5.72M
+$3
+$4
+16,385
+Aug 28, 2023
+Favicon for openai
+OpenAI: GPT-3.5 Turbo
+
+477M
+$0.50
+$1.50
+16,385
+May 28, 2023
+Favicon for openai
+OpenAI: GPT-4
+
+123M
+$30
+$60
+8,191
+
+May 28, 2023
+Favicon for openai
+OpenAI: GPT-4 (older v0314)
+
+—
+$30
+$60
+8,191
+
+May 28, 2023

@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CareerCraft AI - CV & Cover Letter Optimizer</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f5f7fa;
+    --surface: #ffffff;
+    --border: #e0e4e8;
+    --text: #1a1a2e;
+    --text-secondary: #6b7280;
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --primary-light: #eef2ff;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --radius: 10px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08);
+    --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  .app {
+    max-width: 1100px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  header {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 20px 28px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  header h1 span { font-size: 24px; }
+  header .subtitle { font-size: 13px; color: var(--text-secondary); }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .api-key-input {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg);
+    padding: 4px 8px 4px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  .api-key-input label { font-size: 12px; font-weight: 600; color: var(--text-secondary); white-space: nowrap; }
+  .api-key-input input {
+    border: none;
+    background: transparent;
+    padding: 6px 0;
+    font-size: 13px;
+    width: 180px;
+    outline: none;
+    font-family: var(--font);
+  }
+  .model-select {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    font-size: 13px;
+    font-family: var(--font);
+    outline: none;
+    cursor: pointer;
+    color: var(--text);
+  }
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 860px) { .main-grid { grid-template-columns: 1fr; } }
+  .input-panel, .output-panel {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+  }
+  .panel-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .panel-body { padding: 16px 20px; flex: 1; }
+  .input-group { margin-bottom: 14px; }
+  .input-group:last-child { margin-bottom: 0; }
+  .input-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .input-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: var(--font);
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.15s;
+    line-height: 1.5;
+    background: var(--bg);
+  }
+  .input-group textarea:focus { border-color: var(--primary); }
+  .input-group textarea#cvInput { min-height: 180px; }
+  .input-group textarea#coverLetterInput { min-height: 120px; }
+  .input-group textarea#jobInput { min-height: 140px; }
+  .char-count {
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-align: right;
+    margin-top: 2px;
+  }
+  .run-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 16px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: var(--font);
+  }
+  .run-btn:hover { background: var(--primary-hover); }
+  .run-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .run-btn .spinner { display: none; }
+  .run-btn.loading .spinner { display: inline-block; }
+  .run-btn.loading .btn-text { display: none; }
+
+  .output-panel .panel-body { padding: 0; display: flex; flex-direction: column; }
+  .chat-area {
+    flex: 1;
+    padding: 16px 20px;
+    overflow-y: auto;
+    max-height: 560px;
+    min-height: 400px;
+  }
+  .chat-area:empty::after {
+    content: 'Your optimized CV and cover letter will appear here. Fill in the inputs and click "Run Optimization".';
+    display: block;
+    color: var(--text-secondary);
+    font-size: 14px;
+    text-align: center;
+    padding: 60px 20px;
+    line-height: 1.6;
+  }
+  .message {
+    margin-bottom: 16px;
+    animation: fadeIn 0.25s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .message .bubble {
+    display: inline-block;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    max-width: 95%;
+    white-space: pre-wrap;
+  }
+  .message.ai .bubble {
+    background: var(--primary-light);
+    border-bottom-left-radius: 4px;
+    color: var(--text);
+  }
+  .message.user .bubble {
+    background: var(--primary);
+    color: white;
+    border-bottom-right-radius: 4px;
+    float: right;
+  }
+  .message .bubble code {
+    background: rgba(0,0,0,0.06);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-family: 'Consolas', 'Courier New', monospace;
+  }
+  .message.ai .bubble code { background: rgba(79,70,229,0.1); color: var(--primary); }
+  .message .bubble table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 8px 0;
+    font-size: 13px;
+  }
+  .message .bubble th, .message .bubble td {
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    text-align: left;
+  }
+  .message .bubble th { background: var(--bg); font-weight: 600; }
+  .message .bubble ul, .message .bubble ol { padding-left: 20px; margin: 6px 0; }
+  .message .bubble hr { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+  .message .bubble h1, .message .bubble h2, .message .bubble h3, .message .bubble h4 {
+    margin-top: 12px;
+    margin-bottom: 6px;
+  }
+  .message .bubble h3 { font-size: 15px; }
+  .message .bubble strong { font-weight: 600; }
+
+  .chat-input-area {
+    display: flex;
+    gap: 8px;
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+    border-radius: 0 0 var(--radius) var(--radius);
+  }
+  .chat-input-area input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: var(--font);
+    outline: none;
+    background: var(--surface);
+  }
+  .chat-input-area input:focus { border-color: var(--primary); }
+  .chat-input-area button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background: var(--primary);
+    color: white;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: background 0.15s;
+    white-space: nowrap;
+  }
+  .chat-input-area button:hover { background: var(--primary-hover); }
+  .chat-input-area button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .status-bar {
+    padding: 10px 20px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg);
+    border-radius: 0 0 var(--radius) var(--radius);
+  }
+  .status-bar .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .status-bar .dot.idle { background: var(--text-secondary); }
+  .status-bar .dot.loading { background: var(--warning); animation: pulse 1s infinite; }
+  .status-bar .dot.done { background: var(--success); }
+  .status-bar .dot.error { background: var(--danger); }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  .action-buttons {
+    display: flex;
+    gap: 8px;
+    padding: 8px 20px;
+    border-top: 1px solid var(--border);
+  }
+  .action-buttons button {
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: var(--font);
+    color: var(--text);
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .action-buttons button:hover { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
+  .action-buttons button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .typing-indicator {
+    display: none;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+  }
+  .typing-indicator.active { display: inline-block; }
+  .typing-indicator span {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--primary);
+    border-radius: 50%;
+    margin-right: 3px;
+    animation: bounce 1.2s infinite;
+  }
+  .typing-indicator span:nth-child(2) { animation-delay: 0.15s; }
+  .typing-indicator span:nth-child(3) { animation-delay: 0.3s; margin-right: 0; }
+  @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--text);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    opacity: 0;
+    transition: all 0.3s;
+    pointer-events: none;
+    z-index: 100;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header>
+    <div>
+      <h1><span>⚡</span> CareerCraft AI</h1>
+      <div class="subtitle">CV & Cover Letter Optimizer</div>
+    </div>
+    <div class="header-right">
+      <div class="api-key-input">
+        <label>🔑</label>
+        <input type="password" id="apiKeyInput" placeholder="sk-or-v1-..." spellcheck="false">
+      </div>
+      <select class="model-select" id="modelSelect">
+        <option value="google/gemini-2.5-flash">Gemini 2.5 Flash</option>
+        <option value="google/gemini-2.5-pro">Gemini 2.5 Pro</option>
+        <option value="anthropic/claude-3.5-sonnet">Claude 3.5 Sonnet</option>
+      </select>
+    </div>
+  </header>
+
+  <div class="main-grid">
+    <!-- INPUT PANEL -->
+    <div class="input-panel">
+      <div class="panel-header">📋 Inputs</div>
+      <div class="panel-body">
+        <div class="input-group">
+          <label for="cvInput">📄 Your CV</label>
+          <textarea id="cvInput" placeholder="Paste your current CV here..."></textarea>
+        </div>
+        <div class="input-group">
+          <label for="coverLetterInput">✉️ Cover Letter</label>
+          <textarea id="coverLetterInput" placeholder="Paste your cover letter, or type 'create new'..."></textarea>
+        </div>
+        <div class="input-group">
+          <label for="jobInput">🏢 Company & Job Info</label>
+          <textarea id="jobInput" placeholder="Company name, job description, website URL, any notes..."></textarea>
+        </div>
+        <button class="run-btn" id="runBtn" onclick="startOptimization()">
+          <span class="spinner">⟳</span>
+          <span class="btn-text">▶ Run Optimization</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- OUTPUT PANEL -->
+    <div class="output-panel">
+      <div class="panel-header">💬 Conversation</div>
+      <div class="panel-body">
+        <div class="chat-area" id="chatArea"></div>
+        <div class="typing-indicator" id="typingIndicator">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="action-buttons" id="actionButtons">
+          <button onclick="copyOutput('cv')" disabled id="copyCvBtn">📄 Copy CV</button>
+          <button onclick="copyOutput('letter')" disabled id="copyLetterBtn">✉️ Copy Cover Letter</button>
+          <button onclick="downloadPDF()" disabled id="pdfBtn">📥 Download PDF</button>
+          <button onclick="clearChat()">🗑 Clear</button>
+        </div>
+        <div class="chat-input-area">
+          <input type="text" id="chatInput" placeholder="Type your response..." disabled>
+          <button id="sendBtn" disabled onclick="sendMessage()">Send</button>
+        </div>
+        <div class="status-bar">
+          <span class="dot idle" id="statusDot"></span>
+          <span id="statusText">Ready</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────────────────────────
+const SYSTEM_PROMPT = `You are CareerCraft AI - a CV and cover letter optimization assistant. You work in a deliberate, turn-by-turn manner to complete all tasks without rushing.
+
+## YOUR WORKFLOW
+
+### STEP 1: COLLECT INPUTS (Single Message)
+Ask the user to provide everything in one go:
+1. **Your Current CV** (paste text or say "create from scratch")
+2. **Your Current Cover Letter** (paste text or say "create new")
+3. **Company & Job Info** (paste: company name, job description, website, any notes)
+Tell them: "Paste all three sections below. I'll handle everything step by step."
+
+### STEP 2: CONFIRM & RESEARCH
+Once you receive inputs:
+1. Acknowledge receipt of all materials
+2. Summarize what you received (CV length, cover letter status, target company)
+3. Ask 2-3 clarifying questions if anything is missing or unclear
+4. Wait for user confirmation before proceeding
+
+### STEP 3: COMPANY RESEARCH
+Tell the user: "Now researching [Company Name]..."
+Use your knowledge to share relevant company background, mission, values, recent developments, industry position, and culture insights. Present a brief research summary (5-7 bullet points max). Ask: "Does this match your understanding? Any corrections before I proceed?"
+
+### STEP 4: CV ANALYSIS & OPTIMIZATION
+Tell the user: "Analyzing your CV against the job requirements..."
+Provide:
+**A. Diagnostic Summary** (3-5 key issues found)
+Format each as: Issue → Why it matters → Quick fix
+
+**B. Priority Changes Table**
+| Priority | Section | Change Needed | Impact |
+|----------|---------|---------------|--------|
+| 🔴 Critical | Work Experience | Quantify achievements | High |
+| 🟡 Important | Skills | Add keywords from JD | Medium |
+
+**C. Optimized CV Draft**
+- Provide the complete revised CV
+- Mark changed sections with **[CHANGED]** tags
+- Keep formatting clean and ATS-friendly
+Ask: "Review the CV changes. Want me to adjust anything before moving to cover letter?"
+
+### STEP 5: COVER LETTER CREATION
+Tell the user: "Creating your tailored cover letter..."
+Provide **2 versions**:
+**Version A - Conservative/Traditional** - Formal tone, structured paragraphs. Best for: Finance, Law, Government, Corporate.
+**Version B - Modern/Conversational** - Friendly tone, more personality. Best for: Tech, Startups, Creative, Marketing.
+
+Each version should:
+- Open with specific company connection
+- Highlight 2-3 relevant achievements from CV
+- Reference company values/research
+- Close with clear call-to-action
+
+Ask: "Which version do you prefer? I can blend them or create a third option."
+
+### STEP 6: FINAL DELIVERABLES
+Summarize everything in one message:
+✅ **Optimized CV** (ready to copy/download)
+✅ **Cover Letter** (user's chosen version)
+✅ **Company Research Notes** (for interview prep)
+✅ **Next Steps Checklist**:
+   - [ ] Save CV as PDF
+   - [ ] Save cover letter as PDF
+   - [ ] Customize for each application
+   - [ ] Prepare 3-5 stories from CV for interviews
+Ask: "Anything else you'd like me to adjust or explain?"
+
+## YOUR BEHAVIOR RULES
+1. **One step at a time** - Don't rush through multiple phases in one message
+2. **Wait for confirmation** - Always check before moving to next step
+3. **Be specific** - Show exact before/after text, not vague advice
+4. **Stay focused** - Don't add unrelated career advice unless asked
+5. **Keep it scannable** - Use tables, bullet points, clear headers
+6. **ATS-aware** - Ensure CVs are applicant-tracking-system friendly
+7. **Quantify everything** - Push for numbers, metrics, results in CV
+
+## FORMATTING STANDARDS
+- Use **bold** for section headers
+- Use proper markdown formatting for CV/cover letter drafts (easy to copy)
+- Use tables for comparisons and priority lists
+- Use ✅ ❌ 🔴 🟡 🟢 for visual indicators
+- Keep messages under reasonable length unless providing full documents
+
+## START THE CONVERSATION
+Begin with: "Hi, I'm CareerCraft AI. I'll optimize your CV and cover letter for your target job. I've received all your inputs. Let me review them and we'll get started!"`;
+
+let state = {
+  messages: [],
+  processing: false,
+  apiKey: '',
+  model: 'google/gemini-2.5-flash',
+  systemPrompt: SYSTEM_PROMPT,
+};
+
+// ─── DOM REFS ────────────────────────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const chatArea = $('chatArea');
+const typingIndicator = $('typingIndicator');
+const chatInput = $('chatInput');
+const sendBtn = $('sendBtn');
+const runBtn = $('runBtn');
+const apiKeyInput = $('apiKeyInput');
+const modelSelect = $('modelSelect');
+const statusDot = $('statusDot');
+const statusText = $('statusText');
+const cvInput = $('cvInput');
+const coverLetterInput = $('coverLetterInput');
+const jobInput = $('jobInput');
+const copyCvBtn = $('copyCvBtn');
+const copyLetterBtn = $('copyLetterBtn');
+const pdfBtn = $('pdfBtn');
+const toast = $('toast');
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+function setStatus(type, text) {
+  statusDot.className = 'dot ' + type;
+  statusText.textContent = text;
+}
+
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+function renderMarkdown(text) {
+  let html = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/```([\s\S]*?)```/g, '<pre style="background:#f0f0f5;padding:10px 12px;border-radius:6px;overflow-x:auto;font-size:12px;font-family:Consolas,monospace;line-height:1.5;margin:6px 0;">$1</pre>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/### (.+)/g, '<h4>$1</h4>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/^✅ /gm, '✅ ')
+    .replace(/^(\d+\.) /gm, '<br>$1 ')
+    .replace(/\n- /g, '<br>• ')
+    .replace(/\n/g, '<br>');
+
+  // Tables
+  html = html.replace(/\|(.+)\|/g, (match) => {
+    if (match.includes('---')) return '';
+    const cells = match.split('|').filter(c => c.trim()).map(c => c.trim());
+    return '<tr><td>' + cells.join('</td><td>') + '</td></tr>';
+  });
+  html = html.replace(/<tr>.*?<\/tr>/g, (match, idx, str) => {
+    const prev = str.substring(0, str.indexOf(match));
+    if (prev.includes('<table>') && !prev.includes('</table>')) return match;
+    return '<table>' + match;
+  });
+  html = html.replace(/(<\/tr>)(?!.*<tr>)/g, '$1</table>');
+
+  return html;
+}
+
+function addMessage(role, text) {
+  const msg = document.createElement('div');
+  msg.className = 'message ' + role;
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  if (role === 'ai') {
+    bubble.innerHTML = renderMarkdown(text);
+  } else {
+    bubble.textContent = text;
+  }
+  msg.appendChild(bubble);
+  chatArea.appendChild(msg);
+  chatArea.scrollTop = chatArea.scrollHeight;
+  state.messages.push({ role, text });
+
+  // Extract CV and cover letter from AI messages for copy buttons
+  if (role === 'ai') {
+    extractOutputs(text);
+  }
+}
+
+let extractedCv = '';
+let extractedLetter = '';
+
+function extractOutputs(text) {
+  const lines = text.split('\n');
+  let inCv = false, inLetter = false;
+  let cvBuf = '', letterBuf = '';
+  for (const line of lines) {
+    if (line.includes('OPTIMIZED CV') || (line.includes('Optimized CV') && line.includes('```'))) {
+      inCv = true; inLetter = false; continue;
+    }
+    if (line.includes('COVER LETTER') || (line.includes('Cover Letter') && line.includes('```'))) {
+      inLetter = true; inCv = false; continue;
+    }
+    if (inCv && line.trim() === '```') { inCv = false; continue; }
+    if (inLetter && line.trim() === '```') { inLetter = false; continue; }
+    if (inCv) cvBuf += line + '\n';
+    if (inLetter) letterBuf += line + '\n';
+  }
+  if (cvBuf.trim()) extractedCv = cvBuf.trim();
+  if (letterBuf.trim()) extractedLetter = letterBuf.trim();
+  copyCvBtn.disabled = !extractedCv;
+  copyLetterBtn.disabled = !extractedLetter;
+  pdfBtn.disabled = !extractedCv && !extractedLetter;
+}
+
+function showTyping() { typingIndicator.classList.add('active'); }
+function hideTyping() { typingIndicator.classList.remove('active'); }
+
+// ─── API CALL ────────────────────────────────────────────────────────────────
+async function callAPI(userMessage) {
+  const apiKey = apiKeyInput.value.trim();
+  if (!apiKey) {
+    showToast('Please enter your OpenRouter API key');
+    throw new Error('No API key');
+  }
+  const model = modelSelect.value;
+
+  const msgs = [
+    { role: 'system', content: state.systemPrompt },
+    ...state.messages.map(m => ({ role: m.role === 'ai' ? 'assistant' : 'user', content: m.text })),
+    { role: 'user', content: userMessage },
+  ];
+
+  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + apiKey,
+      'Content-Type': 'application/json',
+      'HTTP-Referer': window.location.origin,
+      'X-Title': 'CareerCraft AI',
+    },
+    body: JSON.stringify({
+      model,
+      messages: msgs,
+      max_tokens: 8192,
+      temperature: 0.7,
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error('API error ' + res.status + ': ' + err);
+  }
+
+  const data = await res.json();
+  return data.choices[0].message.content;
+}
+
+// ─── CHAT FLOW ───────────────────────────────────────────────────────────────
+async function startOptimization() {
+  const cv = cvInput.value.trim();
+  const cover = coverLetterInput.value.trim();
+  const job = jobInput.value.trim();
+
+  if (!cv && !cover && !job) {
+    showToast('Please fill in at least one field');
+    return;
+  }
+  if (!apiKeyInput.value.trim()) {
+    showToast('Please enter your OpenRouter API key');
+    return;
+  }
+
+  // Save API key and model
+  state.apiKey = apiKeyInput.value.trim();
+  state.model = modelSelect.value;
+
+  runBtn.disabled = true;
+  runBtn.classList.add('loading');
+  chatInput.disabled = false;
+  sendBtn.disabled = false;
+  setStatus('loading', 'Processing...');
+
+  const userMsg = [
+    cv ? '📄 MY CV:\n' + cv : '📄 CV: Create from scratch',
+    cover ? '✉️ MY COVER LETTER:\n' + cover : '✉️ Cover Letter: Create new',
+    job ? '🏢 COMPANY & JOB:\n' + job : '🏢 Company Info: Not provided',
+  ].join('\n\n---\n\n');
+
+  addMessage('user', 'Starting optimization with my CV and job details...');
+  state.messages = []; // Reset since we start fresh with system context
+  state.messages.push({ role: 'user', text: userMsg });
+
+  showTyping();
+  try {
+    const reply = await callAPI(userMsg);
+    hideTyping();
+    addMessage('ai', reply);
+    setStatus('done', 'Response received');
+  } catch (err) {
+    hideTyping();
+    setStatus('error', 'Error');
+    addMessage('ai', '❌ Error: ' + err.message);
+    showToast('Error: ' + err.message);
+  } finally {
+    runBtn.disabled = false;
+    runBtn.classList.remove('loading');
+  }
+}
+
+async function sendMessage() {
+  const text = chatInput.value.trim();
+  if (!text || state.processing) return;
+
+  chatInput.value = '';
+  addMessage('user', text);
+
+  state.processing = true;
+  sendBtn.disabled = true;
+  chatInput.disabled = true;
+  showTyping();
+  setStatus('loading', 'Processing...');
+
+  try {
+    const reply = await callAPI(text);
+    hideTyping();
+    addMessage('ai', reply);
+    setStatus('done', 'Response received');
+  } catch (err) {
+    hideTyping();
+    setStatus('error', 'Error');
+    addMessage('ai', '❌ Error: ' + err.message);
+    showToast('Error: ' + err.message);
+  } finally {
+    state.processing = false;
+    sendBtn.disabled = false;
+    chatInput.disabled = false;
+    chatInput.focus();
+  }
+}
+
+// ─── UTILITIES ───────────────────────────────────────────────────────────────
+function copyOutput(type) {
+  const text = type === 'cv' ? extractedCv : extractedLetter;
+  if (!text) { showToast('Nothing to copy'); return; }
+  navigator.clipboard.writeText(text).then(() => {
+    showToast(type === 'cv' ? 'CV copied!' : 'Cover letter copied!');
+  }).catch(() => {
+    showToast('Failed to copy');
+  });
+}
+
+function downloadPDF() {
+  const content = [];
+  if (extractedCv) content.push('=== OPTIMIZED CV ===\n\n' + extractedCv);
+  if (extractedLetter) content.push('\n\n=== COVER LETTER ===\n\n' + extractedLetter);
+
+  if (!content.length) { showToast('No content to download'); return; }
+
+  const win = window.open('', '_blank');
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>CareerCraft Output</title>
+<style>
+  body { font-family: 'Segoe UI', system-ui, sans-serif; padding: 40px; max-width: 800px; margin: 0 auto; line-height: 1.6; color: #1a1a2e; }
+  h1 { color: #4f46e5; border-bottom: 2px solid #4f46e5; padding-bottom: 8px; }
+  pre { background: #f5f5fa; padding: 12px; border-radius: 6px; white-space: pre-wrap; font-family: Consolas, monospace; }
+  @media print { body { padding: 20px; } }
+</style></head><body><h1>CareerCraft AI - Optimized Output</h1>
+<pre>${content.join('\n')}</pre>
+<script>window.onload = function() { window.print(); }</script></body></html>`);
+  win.document.close();
+}
+
+function clearChat() {
+  chatArea.innerHTML = '';
+  state.messages = [];
+  extractedCv = '';
+  extractedLetter = '';
+  copyCvBtn.disabled = true;
+  copyLetterBtn.disabled = true;
+  pdfBtn.disabled = true;
+  setStatus('idle', 'Ready');
+}
+
+// ─── EVENTS ──────────────────────────────────────────────────────────────────
+chatInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+apiKeyInput.addEventListener('input', () => {
+  localStorage.setItem('careercraft_api_key', apiKeyInput.value);
+});
+modelSelect.addEventListener('change', () => {
+  localStorage.setItem('careercraft_model', modelSelect.value);
+});
+
+// Restore saved values
+const savedKey = localStorage.getItem('careercraft_api_key');
+if (savedKey) apiKeyInput.value = savedKey;
+const savedModel = localStorage.getItem('careercraft_model');
+if (savedModel) modelSelect.value = savedModel;
+
+setStatus('idle', 'Ready');
+</script>
+</body>
+</html>

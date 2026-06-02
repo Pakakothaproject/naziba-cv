@@ -7,7 +7,9 @@
   "scripts": {
     "build": "tsc && node -e \"require('fs').cpSync('src/public','dist/public',{recursive:true})\"",
     "start": "node dist/index.js",
-    "dev": "npm run build && node dist/index.js"
+    "dev": "npm run build && node dist/index.js",
+    "inject-key": "node inject-api-key.cjs",
+    "deploy:cloudflare": "npm run inject-key && npx wrangler pages deploy docs"
   },
   "dependencies": {
     "cors": "^2.8.5",
